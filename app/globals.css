@@ -121,3 +121,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide scrollbars for iframe */
+iframe::-webkit-scrollbar {
+  display: none;
+}

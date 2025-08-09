@@ -611,6 +611,9 @@ export default function MockupScreenshotApp() {
                               width: `${100 / websiteScale}%`,
                               height: `${100 / websiteScale}%`,
                               marginTop: '44px', // Push content below status bar
+                              overflow: 'hidden',
+                              scrollbarWidth: 'none', // Firefox
+                              msOverflowStyle: 'none', // IE and Edge
                             }}
                           />
                         </div>
