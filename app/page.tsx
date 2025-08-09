@@ -543,6 +543,14 @@ export default function MockupScreenshotApp() {
                           <div className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
                             isDarkMode ? 'text-white bg-black' : 'text-black bg-white'
                           }`}>
+                            {/* iPhone Notch */}
+                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 rounded-b-3xl bg-black border-2 border-gray-900">
+                              {/* Speaker grille */}
+                              <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-14 h-1 rounded-full bg-gray-800" />
+                              {/* Camera */}
+                              <div className="absolute top-1.5 right-7 w-2.5 h-2.5 rounded-full bg-gray-900" />
+                            </div>
+
                             {/* Left side - Time */}
                             <div className="flex items-center">
                               <span className="font-semibold">
