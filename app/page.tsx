@@ -15,7 +15,9 @@ import {
   Minimize,
   ChevronDown,
   ChevronUp,
+  Wifi,
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function MockupScreenshotApp() {
   const [gradientStart, setGradientStart] = useState("#56ab2f");
@@ -35,6 +37,15 @@ export default function MockupScreenshotApp() {
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -493,51 +504,124 @@ export default function MockupScreenshotApp() {
               style={gradientStyle}
             >
               {activeDevice === "iphone" && (
-                <div
-                  className="relative"
-                  style={{
-                    filter: shadowEnabled
-                      ? `drop-shadow(0 ${
-                          shadowBlur / 2
-                        }px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})) drop-shadow(0 ${shadowSpread}px ${
-                          shadowSpread * 2
-                        }px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
-                      : "none",
-                  }}
-                >
-                  <Image
-                    src="/images/iphone-mockup.png"
-                    alt="iPhone Mockup"
-                    width={300}
-                    height={600}
-                    className={`max-w-full h-auto ${
-                      isFullscreen ? "max-h-[85vh]" : ""
-                    }`}
-                    style={{
-                      height: isFullscreen ? "85vh" : "auto",
-                      width: "auto",
-                    }}
-                    priority
-                  />
-                  <div
-                    className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                    style={{
-                      borderRadius: `${cornerRadius}px`,
-                    }}
-                  >
-                    <iframe
-                      src={websiteUrl}
-                      className="w-full h-full border-0 bg-white origin-top-left"
-                      title="Website Preview"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      style={{
-                        transform: `scale(${websiteScale})`,
-                        width: `${100 / websiteScale}%`,
-                        height: `${100 / websiteScale}%`,
-                      }}
-                    />
-                  </div>
-                </div>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div
+                        className="relative cursor-help"
+                        style={{
+                          filter: shadowEnabled
+                            ? `drop-shadow(0 ${
+                                shadowBlur / 2
+                              }px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})) drop-shadow(0 ${shadowSpread}px ${
+                                shadowSpread * 2
+                              }px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
+                            : "none",
+                        }}
+                      >
+                        <Image
+                          src="/images/iphone-mockup.png"
+                          alt="iPhone Mockup"
+                          width={300}
+                          height={600}
+                          className={`max-w-full h-auto ${
+                            isFullscreen ? "max-h-[85vh]" : ""
+                          }`}
+                          style={{
+                            height: isFullscreen ? "85vh" : "auto",
+                            width: "auto",
+                          }}
+                          priority
+                        />
+                        <div
+                          className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
+                          style={{
+                            borderRadius: `${cornerRadius}px`,
+                          }}
+                        >
+                          {/* iPhone Status Bar */}
+                          <div className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
+                            isDarkMode ? 'text-white bg-black' : 'text-black bg-white'
+                          }`}>
+                            {/* Left side - Time */}
+                            <div className="flex items-center">
+                              <span className="font-semibold">
+                                {currentTime.toLocaleTimeString('en-US', {
+                                  hour: 'numeric',
+                                  minute: '2-digit',
+                                  hour12: false
+                                })}
+                              </span>
+                            </div>
+
+                            {/* Right side - Status indicators */}
+                            <div className="flex items-center space-x-1">
+                              {/* Signal strength */}
+                              <div className="flex items-center space-x-0.5">
+                                <div className={`w-1 h-1 rounded-full ${
+                                  isDarkMode ? 'bg-white' : 'bg-black'
+                                }`} />
+                                <div className={`w-1 h-1.5 rounded-full ${
+                                  isDarkMode ? 'bg-white' : 'bg-black'
+                                }`} />
+                                <div className={`w-1 h-2 rounded-full ${
+                                  isDarkMode ? 'bg-white' : 'bg-black'
+                                }`} />
+                                <div className={`w-1 h-2.5 rounded-full ${
+                                  isDarkMode ? 'bg-white' : 'bg-black'
+                                }`} />
+                              </div>
+
+                              {/* WiFi icon */}
+                              <Wifi className={`w-4 h-4 ${
+                                isDarkMode ? 'text-white' : 'text-black'
+                              }`} />
+
+                              {/* Battery */}
+                              <div className="flex items-center">
+                                <div className={`w-6 h-3 border rounded-sm relative ${
+                                  isDarkMode ? 'border-white' : 'border-black'
+                                }`}>
+                                  <div className={`absolute inset-0.5 rounded-sm ${
+                                    isDarkMode ? 'bg-white' : 'bg-black'
+                                  }`} style={{ width: '85%' }} />
+                                </div>
+                                <div className={`w-0.5 h-1.5 rounded-r-sm ml-0.5 ${
+                                  isDarkMode ? 'bg-white' : 'bg-black'
+                                }`} />
+                              </div>
+                            </div>
+                          </div>
+
+                          <iframe
+                            src={websiteUrl}
+                            className="w-full h-full border-0 bg-white origin-top-left"
+                            title="Website Preview"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                            style={{
+                              transform: `scale(${websiteScale})`,
+                              width: `${100 / websiteScale}%`,
+                              height: `${100 / websiteScale}%`,
+                              marginTop: '44px', // Push content below status bar
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p className="text-sm">
+                        <a
+                          href="https://www.freepik.com/free-vector/realistic-front-view-smartphone-mockup-mobile-iphone-purple-frame-with-blank-white-display-vector_33632332.htm"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 hover:text-blue-700 underline"
+                        >
+                          Image by svstudioart on Freepik
+                        </a>
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
 
               {activeDevice === "macbook" && (
