@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   keywords: ['mockup', 'screenshot', 'showcase', 'design'],
   authors: [{ name: 'Project Showcase' }],
   creator: 'Project Showcase',
+  icons: [
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      url: '/favicon.svg',
+    },
+  ],
 }
 
 export default function RootLayout({
@@ -22,7 +30,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-background font-sans antialiased">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

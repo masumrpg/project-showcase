@@ -1,6 +1,10 @@
 {
   "name": "project-showcase",
   "version": "0.1.0",
+  "author": {
+    "name": "Ma'sum",
+    "email": "mclasix@gmail.com"
+  },
   "private": true,
   "scripts": {
     "build": "next build",
@@ -44,7 +48,6 @@
     "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.6.0",
     "geist": "^1.4.2",
-    "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.454.0",
     "next": "^15.4.6",
