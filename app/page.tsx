@@ -210,7 +210,7 @@ export default function MockupScreenshotApp() {
                         id="corner-radius"
                         type="range"
                         min="0"
-                        max="100"
+                        max="50"
                         step="2"
                         value={cornerRadius}
                         onChange={(e) =>
@@ -220,7 +220,7 @@ export default function MockupScreenshotApp() {
                       />
                       <div className="flex justify-between text-xs text-muted-foreground">
                         <span>0px</span>
-                        <span>100px</span>
+                        <span>50px</span>
                       </div>
                     </div>
 
