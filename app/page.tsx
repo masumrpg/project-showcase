@@ -29,7 +29,7 @@ export default function MockupScreenshotApp() {
   const [websiteUrl, setWebsiteUrl] = useState("https://example.com");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [websiteScale, setWebsiteScale] = useState(1);
-  const [cornerRadius, setCornerRadius] = useState(20);
+  const [cornerRadius, setCornerRadius] = useState(activeDevice === "iphone" ? 50 : 0);
   const [shadowEnabled, setShadowEnabled] = useState(true);
   const [shadowBlur, setShadowBlur] = useState(40);
   const [shadowSpread, setShadowSpread] = useState(0);
@@ -91,6 +91,10 @@ export default function MockupScreenshotApp() {
   useEffect(() => {
     checkScrollPosition();
   }, []);
+
+  useEffect(() => {
+    setCornerRadius(activeDevice === "iphone" ? 50 : 0);
+  }, [activeDevice]);
 
   const gradientStyle = {
     background: `linear-gradient(${gradientDirection}, ${gradientStart}, ${gradientEnd})`,
@@ -222,7 +226,7 @@ export default function MockupScreenshotApp() {
                         type="range"
                         min="0"
                         max="50"
-                        step="2"
+                        step="1"
                         value={cornerRadius}
                         onChange={(e) =>
                           setCornerRadius(Number.parseInt(e.target.value))
@@ -605,7 +609,8 @@ export default function MockupScreenshotApp() {
                             src={websiteUrl}
                             className="w-full h-full border-0 bg-white origin-top-left"
                             title="Website Preview"
-                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                            allow="cookies *"
+                            allowFullScreen
                             style={{
                               transform: `scale(${websiteScale})`,
                               width: `${100 / websiteScale}%`,
@@ -672,7 +677,8 @@ export default function MockupScreenshotApp() {
                       src={websiteUrl}
                       className="w-full h-full border-0 bg-white origin-top-left"
                       title="Website Preview"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      allow="cookies *"
+                      allowFullScreen
                       style={{
                         transform: `scale(${websiteScale})`,
                         width: `${100 / websiteScale}%`,
