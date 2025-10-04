@@ -16,6 +16,13 @@ import {
   ChevronDown,
   ChevronUp,
   Wifi,
+  Loader2,
+  ArrowDown,
+  ArrowUp,
+  ArrowLeft,
+  ArrowRight,
+  ArrowDownLeft,
+  ArrowUpRight,
 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -217,14 +224,18 @@ export default function MockupScreenshotApp() {
   // Show loading screen while localStorage is loading
   if (!isLoaded) {
     return (
-      <div className={`min-h-screen flex items-center justify-center ${
-        isDarkMode ? "bg-gray-900" : "bg-white"
-      }`}>
+      <div
+        className={`min-h-screen flex items-center justify-center ${
+          isDarkMode ? "bg-gray-900" : "bg-white"
+        }`}
+      >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className={`text-lg ${
-            isDarkMode ? "text-white" : "text-gray-900"
-          }`}>Loading settings...</p>
+          <Loader2 className="animate-spin h-12 w-12 text-blue-600 mx-auto mb-4" />
+          <p
+            className={`text-lg ${isDarkMode ? "text-white" : "text-gray-900"}`}
+          >
+            Loading settings...
+          </p>
         </div>
       </div>
     );
@@ -544,13 +555,97 @@ export default function MockupScreenshotApp() {
                             : ""
                         }`}
                       >
-                        <option value="135deg">Diagonal ↘</option>
-                        <option value="90deg">Vertical ↓</option>
-                        <option value="0deg">Horizontal →</option>
-                        <option value="45deg">Diagonal ↗</option>
-                        <option value="180deg">Horizontal ←</option>
-                        <option value="270deg">Vertical ↑</option>
+                        <option value="135deg">Diagonal</option>
+                        <option value="90deg">Vertical</option>
+                        <option value="0deg">Horizontal</option>
+                        <option value="45deg">Diagonal</option>
+                        <option value="180deg">Horizontal</option>
+                        <option value="270deg">Vertical</option>
                       </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Quick Direction</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button
+                          onClick={() => setGradientDirection("270deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "270deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Vertical ↑"
+                        >
+                          <ArrowUp className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setGradientDirection("45deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "45deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Diagonal ↗"
+                        >
+                          <ArrowUpRight className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setGradientDirection("0deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "0deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Horizontal →"
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setGradientDirection("180deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "180deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Horizontal ←"
+                        >
+                          <ArrowLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setGradientDirection("135deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "135deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Diagonal ↘"
+                        >
+                          <ArrowDownLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => setGradientDirection("90deg")}
+                          className={`p-2 border rounded flex items-center justify-center transition-colors ${
+                            gradientDirection === "90deg"
+                              ? "bg-blue-500 text-white border-blue-500"
+                              : isDarkMode
+                              ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                              : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                          }`}
+                          title="Vertical ↓"
+                        >
+                          <ArrowDown className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
 
                     <div className="space-y-2">
@@ -683,9 +778,13 @@ export default function MockupScreenshotApp() {
                           }}
                         >
                           {/* iPhone Status Bar */}
-                          <div className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
-                            isDarkMode ? 'text-white bg-black' : 'text-black bg-white'
-                          }`}>
+                          <div
+                            className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
+                              isDarkMode
+                                ? "text-white bg-black"
+                                : "text-black bg-white"
+                            }`}
+                          >
                             {/* iPhone Notch */}
                             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 rounded-b-3xl bg-black border-2 border-gray-900">
                               {/* Speaker grille */}
@@ -697,10 +796,10 @@ export default function MockupScreenshotApp() {
                             {/* Left side - Time */}
                             <div className="flex items-center">
                               <span className="font-semibold">
-                                {currentTime.toLocaleTimeString('en-US', {
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                  hour12: false
+                                {currentTime.toLocaleTimeString("en-US", {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                  hour12: false,
                                 })}
                               </span>
                             </div>
@@ -709,37 +808,54 @@ export default function MockupScreenshotApp() {
                             <div className="flex items-center space-x-1">
                               {/* Signal strength */}
                               <div className="flex items-center space-x-0.5">
-                                <div className={`w-1 h-1 rounded-full ${
-                                  isDarkMode ? 'bg-white' : 'bg-black'
-                                }`} />
-                                <div className={`w-1 h-1.5 rounded-full ${
-                                  isDarkMode ? 'bg-white' : 'bg-black'
-                                }`} />
-                                <div className={`w-1 h-2 rounded-full ${
-                                  isDarkMode ? 'bg-white' : 'bg-black'
-                                }`} />
-                                <div className={`w-1 h-2.5 rounded-full ${
-                                  isDarkMode ? 'bg-white' : 'bg-black'
-                                }`} />
+                                <div
+                                  className={`w-1 h-1 rounded-full ${
+                                    isDarkMode ? "bg-white" : "bg-black"
+                                  }`}
+                                />
+                                <div
+                                  className={`w-1 h-1.5 rounded-full ${
+                                    isDarkMode ? "bg-white" : "bg-black"
+                                  }`}
+                                />
+                                <div
+                                  className={`w-1 h-2 rounded-full ${
+                                    isDarkMode ? "bg-white" : "bg-black"
+                                  }`}
+                                />
+                                <div
+                                  className={`w-1 h-2.5 rounded-full ${
+                                    isDarkMode ? "bg-white" : "bg-black"
+                                  }`}
+                                />
                               </div>
 
                               {/* WiFi icon */}
-                              <Wifi className={`w-4 h-4 ${
-                                isDarkMode ? 'text-white' : 'text-black'
-                              }`} />
+                              <Wifi
+                                className={`w-4 h-4 ${
+                                  isDarkMode ? "text-white" : "text-black"
+                                }`}
+                              />
 
                               {/* Battery */}
                               <div className="flex items-center">
-                                <div className={`w-6 h-3 border rounded-sm relative ${
-                                  isDarkMode ? 'border-white' : 'border-black'
-                                }`}>
-                                  <div className={`absolute inset-0.5 rounded-sm ${
-                                    isDarkMode ? 'bg-white' : 'bg-black'
-                                  }`} style={{ width: '85%' }} />
+                                <div
+                                  className={`w-6 h-3 border rounded-sm relative ${
+                                    isDarkMode ? "border-white" : "border-black"
+                                  }`}
+                                >
+                                  <div
+                                    className={`absolute inset-0.5 rounded-sm ${
+                                      isDarkMode ? "bg-white" : "bg-black"
+                                    }`}
+                                    style={{ width: "85%" }}
+                                  />
                                 </div>
-                                <div className={`w-0.5 h-1.5 rounded-r-sm ml-0.5 ${
-                                  isDarkMode ? 'bg-white' : 'bg-black'
-                                }`} />
+                                <div
+                                  className={`w-0.5 h-1.5 rounded-r-sm ml-0.5 ${
+                                    isDarkMode ? "bg-white" : "bg-black"
+                                  }`}
+                                />
                               </div>
                             </div>
                           </div>
@@ -754,10 +870,10 @@ export default function MockupScreenshotApp() {
                               transform: `scale(${websiteScale})`,
                               width: `${100 / websiteScale}%`,
                               height: `${100 / websiteScale}%`,
-                              marginTop: '44px', // Push content below status bar
-                              overflow: 'hidden',
-                              scrollbarWidth: 'none', // Firefox
-                              msOverflowStyle: 'none', // IE and Edge
+                              marginTop: "44px", // Push content below status bar
+                              overflow: "hidden",
+                              scrollbarWidth: "none", // Firefox
+                              msOverflowStyle: "none", // IE and Edge
                             }}
                           />
                         </div>
