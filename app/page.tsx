@@ -7,6 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Moon,
   Sun,
   Smartphone,
@@ -24,7 +31,12 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function MockupScreenshotApp() {
   const defaultSettings = {
@@ -39,24 +51,40 @@ export default function MockupScreenshotApp() {
     shadowBlur: 40,
     shadowSpread: 0,
     shadowOpacity: 0.3,
-    isDarkMode: false
+    isDarkMode: false,
   };
 
   // Initialize with default values first
-  const [gradientStart, setGradientStart] = useState(defaultSettings.gradientStart);
+  const [gradientStart, setGradientStart] = useState(
+    defaultSettings.gradientStart
+  );
   const [gradientEnd, setGradientEnd] = useState(defaultSettings.gradientEnd);
-  const [gradientDirection, setGradientDirection] = useState(defaultSettings.gradientDirection);
-  const [activeDevice, setActiveDevice] = useState(defaultSettings.activeDevice);
+  const [gradientDirection, setGradientDirection] = useState(
+    defaultSettings.gradientDirection
+  );
+  const [activeDevice, setActiveDevice] = useState(
+    defaultSettings.activeDevice
+  );
   const mockupRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [websiteUrl, setWebsiteUrl] = useState(defaultSettings.websiteUrl);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [websiteScale, setWebsiteScale] = useState(defaultSettings.websiteScale);
-  const [cornerRadius, setCornerRadius] = useState(defaultSettings.cornerRadius);
-  const [shadowEnabled, setShadowEnabled] = useState(defaultSettings.shadowEnabled);
+  const [websiteScale, setWebsiteScale] = useState(
+    defaultSettings.websiteScale
+  );
+  const [cornerRadius, setCornerRadius] = useState(
+    defaultSettings.cornerRadius
+  );
+  const [shadowEnabled, setShadowEnabled] = useState(
+    defaultSettings.shadowEnabled
+  );
   const [shadowBlur, setShadowBlur] = useState(defaultSettings.shadowBlur);
-  const [shadowSpread, setShadowSpread] = useState(defaultSettings.shadowSpread);
-  const [shadowOpacity, setShadowOpacity] = useState(defaultSettings.shadowOpacity);
+  const [shadowSpread, setShadowSpread] = useState(
+    defaultSettings.shadowSpread
+  );
+  const [shadowOpacity, setShadowOpacity] = useState(
+    defaultSettings.shadowOpacity
+  );
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(defaultSettings.isDarkMode);
@@ -65,31 +93,53 @@ export default function MockupScreenshotApp() {
 
   // Load settings from localStorage on mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       try {
-        const stored = localStorage.getItem('mockupSettings');
+        const stored = localStorage.getItem("mockupSettings");
         if (stored) {
           const settings = JSON.parse(stored);
-          setGradientStart(settings.gradientStart || defaultSettings.gradientStart);
+          setGradientStart(
+            settings.gradientStart || defaultSettings.gradientStart
+          );
           setGradientEnd(settings.gradientEnd || defaultSettings.gradientEnd);
-          setGradientDirection(settings.gradientDirection || defaultSettings.gradientDirection);
-          setActiveDevice(settings.activeDevice || defaultSettings.activeDevice);
+          setGradientDirection(
+            settings.gradientDirection || defaultSettings.gradientDirection
+          );
+          setActiveDevice(
+            settings.activeDevice || defaultSettings.activeDevice
+          );
           setWebsiteUrl(settings.websiteUrl || defaultSettings.websiteUrl);
-          setWebsiteScale(settings.websiteScale || defaultSettings.websiteScale);
-          setCornerRadius(settings.cornerRadius || defaultSettings.cornerRadius);
-          setShadowEnabled(settings.shadowEnabled !== undefined ? settings.shadowEnabled : defaultSettings.shadowEnabled);
+          setWebsiteScale(
+            settings.websiteScale || defaultSettings.websiteScale
+          );
+          setCornerRadius(
+            settings.cornerRadius || defaultSettings.cornerRadius
+          );
+          setShadowEnabled(
+            settings.shadowEnabled !== undefined
+              ? settings.shadowEnabled
+              : defaultSettings.shadowEnabled
+          );
           setShadowBlur(settings.shadowBlur || defaultSettings.shadowBlur);
-          setShadowSpread(settings.shadowSpread || defaultSettings.shadowSpread);
-          setShadowOpacity(settings.shadowOpacity || defaultSettings.shadowOpacity);
-          setIsDarkMode(settings.isDarkMode !== undefined ? settings.isDarkMode : defaultSettings.isDarkMode);
+          setShadowSpread(
+            settings.shadowSpread || defaultSettings.shadowSpread
+          );
+          setShadowOpacity(
+            settings.shadowOpacity || defaultSettings.shadowOpacity
+          );
+          setIsDarkMode(
+            settings.isDarkMode !== undefined
+              ? settings.isDarkMode
+              : defaultSettings.isDarkMode
+          );
 
           // Apply dark mode immediately if stored
           if (settings.isDarkMode) {
-            document.documentElement.classList.add('dark');
+            document.documentElement.classList.add("dark");
           }
         }
       } catch (error) {
-        console.error('Failed to load settings:', error);
+        console.error("Failed to load settings:", error);
       }
       setIsLoaded(true);
     }
@@ -104,7 +154,7 @@ export default function MockupScreenshotApp() {
   }, []);
 
   const saveSettings = () => {
-    if (typeof window !== 'undefined' && isLoaded) {
+    if (typeof window !== "undefined" && isLoaded) {
       try {
         const currentSettings = {
           gradientStart,
@@ -118,18 +168,18 @@ export default function MockupScreenshotApp() {
           shadowBlur,
           shadowSpread,
           shadowOpacity,
-          isDarkMode
+          isDarkMode,
         };
-        localStorage.setItem('mockupSettings', JSON.stringify(currentSettings));
+        localStorage.setItem("mockupSettings", JSON.stringify(currentSettings));
       } catch (error) {
-        console.error('Failed to save settings:', error);
+        console.error("Failed to save settings:", error);
       }
     }
   };
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
+    document.documentElement.classList.toggle("dark");
   };
 
   const resetSettings = () => {
@@ -147,8 +197,8 @@ export default function MockupScreenshotApp() {
     setIsDarkMode(defaultSettings.isDarkMode);
 
     // Clear localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('mockupSettings');
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("mockupSettings");
     }
   };
 
@@ -214,7 +264,7 @@ export default function MockupScreenshotApp() {
     shadowSpread,
     shadowOpacity,
     isDarkMode,
-    isLoaded
+    isLoaded,
   ]);
 
   const gradientStyle = {
@@ -545,23 +595,22 @@ export default function MockupScreenshotApp() {
 
                     <div className="space-y-2">
                       <Label htmlFor="gradient-direction">Direction</Label>
-                      <select
-                        id="gradient-direction"
+                      <Select
                         value={gradientDirection}
-                        onChange={(e) => setGradientDirection(e.target.value)}
-                        className={`w-full px-3 py-2 border rounded text-sm ${
-                          isDarkMode
-                            ? "bg-gray-700 border-gray-600 text-white"
-                            : ""
-                        }`}
+                        onValueChange={setGradientDirection}
                       >
-                        <option value="135deg">Diagonal</option>
-                        <option value="90deg">Vertical</option>
-                        <option value="0deg">Horizontal</option>
-                        <option value="45deg">Diagonal</option>
-                        <option value="180deg">Horizontal</option>
-                        <option value="270deg">Vertical</option>
-                      </select>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select gradient direction" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="135deg">Diagonal</SelectItem>
+                          <SelectItem value="90deg">Vertical</SelectItem>
+                          <SelectItem value="0deg">Horizontal</SelectItem>
+                          <SelectItem value="45deg">Diagonal</SelectItem>
+                          <SelectItem value="180deg">Horizontal</SelectItem>
+                          <SelectItem value="270deg">Vertical</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div className="space-y-2">
