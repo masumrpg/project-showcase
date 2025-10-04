@@ -20,24 +20,73 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function MockupScreenshotApp() {
-  const [gradientStart, setGradientStart] = useState("#56ab2f");
-  const [gradientEnd, setGradientEnd] = useState("#a8e6cf");
-  const [gradientDirection, setGradientDirection] = useState("135deg");
-  const [activeDevice, setActiveDevice] = useState("iphone");
+  const defaultSettings = {
+    gradientStart: "#56ab2f",
+    gradientEnd: "#a8e6cf",
+    gradientDirection: "135deg",
+    activeDevice: "iphone",
+    websiteUrl: "https://example.com",
+    websiteScale: 1,
+    cornerRadius: 50,
+    shadowEnabled: true,
+    shadowBlur: 40,
+    shadowSpread: 0,
+    shadowOpacity: 0.3,
+    isDarkMode: false
+  };
+
+  // Initialize with default values first
+  const [gradientStart, setGradientStart] = useState(defaultSettings.gradientStart);
+  const [gradientEnd, setGradientEnd] = useState(defaultSettings.gradientEnd);
+  const [gradientDirection, setGradientDirection] = useState(defaultSettings.gradientDirection);
+  const [activeDevice, setActiveDevice] = useState(defaultSettings.activeDevice);
   const mockupRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [websiteUrl, setWebsiteUrl] = useState("https://example.com");
+  const [websiteUrl, setWebsiteUrl] = useState(defaultSettings.websiteUrl);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [websiteScale, setWebsiteScale] = useState(1);
-  const [cornerRadius, setCornerRadius] = useState(activeDevice === "iphone" ? 50 : 0);
-  const [shadowEnabled, setShadowEnabled] = useState(true);
-  const [shadowBlur, setShadowBlur] = useState(40);
-  const [shadowSpread, setShadowSpread] = useState(0);
-  const [shadowOpacity, setShadowOpacity] = useState(0.3);
+  const [websiteScale, setWebsiteScale] = useState(defaultSettings.websiteScale);
+  const [cornerRadius, setCornerRadius] = useState(defaultSettings.cornerRadius);
+  const [shadowEnabled, setShadowEnabled] = useState(defaultSettings.shadowEnabled);
+  const [shadowBlur, setShadowBlur] = useState(defaultSettings.shadowBlur);
+  const [shadowSpread, setShadowSpread] = useState(defaultSettings.shadowSpread);
+  const [shadowOpacity, setShadowOpacity] = useState(defaultSettings.shadowOpacity);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(defaultSettings.isDarkMode);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('mockupSettings');
+        if (stored) {
+          const settings = JSON.parse(stored);
+          setGradientStart(settings.gradientStart || defaultSettings.gradientStart);
+          setGradientEnd(settings.gradientEnd || defaultSettings.gradientEnd);
+          setGradientDirection(settings.gradientDirection || defaultSettings.gradientDirection);
+          setActiveDevice(settings.activeDevice || defaultSettings.activeDevice);
+          setWebsiteUrl(settings.websiteUrl || defaultSettings.websiteUrl);
+          setWebsiteScale(settings.websiteScale || defaultSettings.websiteScale);
+          setCornerRadius(settings.cornerRadius || defaultSettings.cornerRadius);
+          setShadowEnabled(settings.shadowEnabled !== undefined ? settings.shadowEnabled : defaultSettings.shadowEnabled);
+          setShadowBlur(settings.shadowBlur || defaultSettings.shadowBlur);
+          setShadowSpread(settings.shadowSpread || defaultSettings.shadowSpread);
+          setShadowOpacity(settings.shadowOpacity || defaultSettings.shadowOpacity);
+          setIsDarkMode(settings.isDarkMode !== undefined ? settings.isDarkMode : defaultSettings.isDarkMode);
+
+          // Apply dark mode immediately if stored
+          if (settings.isDarkMode) {
+            document.documentElement.classList.add('dark');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      }
+      setIsLoaded(true);
+    }
+  }, []);
 
   // Update time every minute
   useEffect(() => {
@@ -47,9 +96,53 @@ export default function MockupScreenshotApp() {
     return () => clearInterval(timer);
   }, []);
 
+  const saveSettings = () => {
+    if (typeof window !== 'undefined' && isLoaded) {
+      try {
+        const currentSettings = {
+          gradientStart,
+          gradientEnd,
+          gradientDirection,
+          activeDevice,
+          websiteUrl,
+          websiteScale,
+          cornerRadius,
+          shadowEnabled,
+          shadowBlur,
+          shadowSpread,
+          shadowOpacity,
+          isDarkMode
+        };
+        localStorage.setItem('mockupSettings', JSON.stringify(currentSettings));
+      } catch (error) {
+        console.error('Failed to save settings:', error);
+      }
+    }
+  };
+
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle('dark');
+  };
+
+  const resetSettings = () => {
+    setGradientStart(defaultSettings.gradientStart);
+    setGradientEnd(defaultSettings.gradientEnd);
+    setGradientDirection(defaultSettings.gradientDirection);
+    setActiveDevice(defaultSettings.activeDevice);
+    setWebsiteUrl(defaultSettings.websiteUrl);
+    setWebsiteScale(defaultSettings.websiteScale);
+    setCornerRadius(defaultSettings.cornerRadius);
+    setShadowEnabled(defaultSettings.shadowEnabled);
+    setShadowBlur(defaultSettings.shadowBlur);
+    setShadowSpread(defaultSettings.shadowSpread);
+    setShadowOpacity(defaultSettings.shadowOpacity);
+    setIsDarkMode(defaultSettings.isDarkMode);
+
+    // Clear localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('mockupSettings');
+    }
   };
 
   const toggleFullscreen = async () => {
@@ -96,9 +189,46 @@ export default function MockupScreenshotApp() {
     setCornerRadius(activeDevice === "iphone" ? 50 : 0);
   }, [activeDevice]);
 
+  // Save settings whenever any setting changes (but only after loaded)
+  useEffect(() => {
+    if (isLoaded) {
+      saveSettings();
+    }
+  }, [
+    gradientStart,
+    gradientEnd,
+    gradientDirection,
+    activeDevice,
+    websiteUrl,
+    websiteScale,
+    cornerRadius,
+    shadowEnabled,
+    shadowBlur,
+    shadowSpread,
+    shadowOpacity,
+    isDarkMode,
+    isLoaded
+  ]);
+
   const gradientStyle = {
     background: `linear-gradient(${gradientDirection}, ${gradientStart}, ${gradientEnd})`,
   };
+
+  // Show loading screen while localStorage is loading
+  if (!isLoaded) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center ${
+        isDarkMode ? "bg-gray-900" : "bg-white"
+      }`}>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className={`text-lg ${
+            isDarkMode ? "text-white" : "text-gray-900"
+          }`}>Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -490,6 +620,15 @@ export default function MockupScreenshotApp() {
                         Dark Mode
                       </>
                     )}
+                  </Button>
+
+                  <Button
+                    onClick={resetSettings}
+                    className="w-full"
+                    variant="destructive"
+                    size="sm"
+                  >
+                    Reset All Settings
                   </Button>
                 </CardContent>
               </Card>
