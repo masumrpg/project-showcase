@@ -30,6 +30,7 @@ export default function MockupScreenshotApp() {
       cornerRadius: 0,
       deviceScale: 1,
     },
+    dualDeviceSpacing: 32,
     shadowEnabled: true,
     shadowBlur: 40,
     shadowSpread: 0,
@@ -57,6 +58,9 @@ export default function MockupScreenshotApp() {
   );
   const [macbookSettings, setMacbookSettings] = useState(
     defaultSettings.macbookSettings
+  );
+  const [dualDeviceSpacing, setDualDeviceSpacing] = useState(
+    defaultSettings.dualDeviceSpacing
   );
   const [shadowEnabled, setShadowEnabled] = useState(
     defaultSettings.shadowEnabled
@@ -124,6 +128,9 @@ export default function MockupScreenshotApp() {
             cornerRadius: settings.macbookSettings?.cornerRadius ?? defaultSettings.macbookSettings.cornerRadius,
             deviceScale: settings.macbookSettings?.deviceScale ?? defaultSettings.macbookSettings.deviceScale,
           });
+          setDualDeviceSpacing(
+            settings.dualDeviceSpacing ?? defaultSettings.dualDeviceSpacing
+          );
           setShadowEnabled(
             settings.shadowEnabled !== undefined
               ? settings.shadowEnabled
@@ -173,6 +180,7 @@ export default function MockupScreenshotApp() {
           websiteUrl,
           iphoneSettings,
           macbookSettings,
+          dualDeviceSpacing,
           shadowEnabled,
           shadowBlur,
           shadowSpread,
@@ -199,6 +207,7 @@ export default function MockupScreenshotApp() {
     setWebsiteUrl(defaultSettings.websiteUrl);
     setIphoneSettings(defaultSettings.iphoneSettings);
     setMacbookSettings(defaultSettings.macbookSettings);
+    setDualDeviceSpacing(defaultSettings.dualDeviceSpacing);
     setShadowEnabled(defaultSettings.shadowEnabled);
     setShadowBlur(defaultSettings.shadowBlur);
     setShadowSpread(defaultSettings.shadowSpread);
@@ -329,6 +338,7 @@ export default function MockupScreenshotApp() {
     websiteUrl,
     iphoneSettings,
     macbookSettings,
+    dualDeviceSpacing,
     shadowEnabled,
     shadowBlur,
     shadowSpread,
@@ -398,14 +408,28 @@ export default function MockupScreenshotApp() {
                   activeDevice={activeDevice}
                   iphoneSettings={iphoneSettings}
                   macbookSettings={macbookSettings}
+                  dualDeviceSpacing={dualDeviceSpacing}
                   onUrlChange={setWebsiteUrl}
                   onRefreshWebsite={refreshWebsite}
-                  onIphoneScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))}
-                  onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
-                  onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
-                  onMacbookCornerRadiusChange={(radius) => setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))}
-                  onIphoneDeviceScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))}
-                  onMacbookDeviceScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))}
+                  onIphoneScaleChange={(scale) =>
+                    setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))
+                  }
+                  onMacbookScaleChange={(scale) =>
+                    setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))
+                  }
+                  onIphoneCornerRadiusChange={(radius) =>
+                    setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))
+                  }
+                  onMacbookCornerRadiusChange={(radius) =>
+                    setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))
+                  }
+                  onIphoneDeviceScaleChange={(scale) =>
+                    setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))
+                  }
+                  onMacbookDeviceScaleChange={(scale) =>
+                    setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))
+                  }
+                  onDualDeviceSpacingChange={setDualDeviceSpacing}
                   isDarkMode={isDarkMode}
                 />
 
@@ -465,6 +489,7 @@ export default function MockupScreenshotApp() {
               websiteUrl={websiteUrl}
               iphoneSettings={iphoneSettings}
               macbookSettings={macbookSettings}
+              dualDeviceSpacing={dualDeviceSpacing}
               shadowEnabled={shadowEnabled}
               shadowBlur={shadowBlur}
               shadowSpread={shadowSpread}
@@ -483,6 +508,7 @@ export default function MockupScreenshotApp() {
               onMacbookCornerRadiusChange={(radius) => setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))}
               onIphoneDeviceScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))}
               onMacbookDeviceScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))}
+              onDualDeviceSpacingChange={setDualDeviceSpacing}
             />
           </div>
         </div>

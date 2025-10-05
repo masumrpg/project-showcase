@@ -23,6 +23,7 @@ interface MockupDisplayProps {
     cornerRadius: number;
     deviceScale: number;
   };
+  dualDeviceSpacing: number;
   shadowEnabled: boolean;
   shadowBlur: number;
   shadowSpread: number;
@@ -41,6 +42,7 @@ interface MockupDisplayProps {
   onMacbookCornerRadiusChange: (radius: number) => void;
   onIphoneDeviceScaleChange: (scale: number) => void;
   onMacbookDeviceScaleChange: (scale: number) => void;
+  onDualDeviceSpacingChange: (spacing: number) => void;
 }
 
 export function MockupDisplay({
@@ -48,6 +50,7 @@ export function MockupDisplay({
   websiteUrl,
   iphoneSettings,
   macbookSettings,
+  dualDeviceSpacing,
   shadowEnabled,
   shadowBlur,
   shadowSpread,
@@ -66,6 +69,7 @@ export function MockupDisplay({
   onMacbookCornerRadiusChange,
   onIphoneDeviceScaleChange,
   onMacbookDeviceScaleChange,
+  onDualDeviceSpacingChange,
 }: MockupDisplayProps) {
   const shadowFilter = shadowEnabled
     ? `drop-shadow(0 ${
@@ -74,6 +78,7 @@ export function MockupDisplay({
         shadowSpread * 2
       }px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
     : "none";
+  const spacingValue = Math.max(0, dualDeviceSpacing ?? 32);
 
   return (
     <div
@@ -283,6 +288,7 @@ export function MockupDisplay({
             className={`flex flex-col lg:flex-row gap-8 items-center justify-center ${
               isFullscreen ? "h-[85vh]" : ""
             }`}
+            style={{ gap: `${spacingValue}px` }}
           >
             {/* iPhone */}
             <Tooltip>
@@ -515,6 +521,44 @@ export function MockupDisplay({
                 URL cannot be changed in fullscreen mode, but you can refresh the website
               </p>
             </div>
+
+            {activeDevice === "both" && (
+              <Card
+                className={`${isDarkMode ? "bg-gray-800 border-gray-700" : ""}`}
+              >
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Smartphone className="w-4 h-4" />
+                    <Laptop className="w-4 h-4" />
+                    Dual Layout
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Device Spacing: {spacingValue}px
+                    </Label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="160"
+                      step="4"
+                      value={spacingValue}
+                      onChange={(e) =>
+                        onDualDeviceSpacingChange(
+                          Number.parseInt(e.target.value, 10)
+                        )
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0px</span>
+                      <span>160px</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* iPhone Settings */}
             {(activeDevice === "iphone" || activeDevice === "both") && (

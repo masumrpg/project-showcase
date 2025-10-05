@@ -15,6 +15,7 @@ interface WebsiteSettingsProps {
     cornerRadius: number;
     deviceScale: number;
   };
+  dualDeviceSpacing: number;
   onUrlChange: (url: string) => void;
   onRefreshWebsite: () => void;
   onIphoneScaleChange: (scale: number) => void;
@@ -23,6 +24,7 @@ interface WebsiteSettingsProps {
   onMacbookCornerRadiusChange: (radius: number) => void;
   onIphoneDeviceScaleChange: (scale: number) => void;
   onMacbookDeviceScaleChange: (scale: number) => void;
+  onDualDeviceSpacingChange: (spacing: number) => void;
   isDarkMode: boolean;
 }
 
@@ -31,6 +33,7 @@ export function WebsiteSettings({
   activeDevice,
   iphoneSettings,
   macbookSettings,
+  dualDeviceSpacing,
   onUrlChange,
   onRefreshWebsite,
   onIphoneScaleChange,
@@ -39,6 +42,7 @@ export function WebsiteSettings({
   onMacbookCornerRadiusChange,
   onIphoneDeviceScaleChange,
   onMacbookDeviceScaleChange,
+  onDualDeviceSpacingChange,
   isDarkMode,
 }: WebsiteSettingsProps) {
   return (
@@ -72,6 +76,36 @@ export function WebsiteSettings({
             </button>
           </div>
         </div>
+
+        {activeDevice === "both" && (
+          <div
+            className={`space-y-2 p-4 rounded-lg border ${
+              isDarkMode
+                ? "bg-gray-900 border-gray-600"
+                : "bg-gray-50 border-gray-200"
+            }`}
+          >
+            <Label htmlFor="dual-device-spacing">
+              Device Spacing: {dualDeviceSpacing}px
+            </Label>
+            <input
+              id="dual-device-spacing"
+              type="range"
+              min="0"
+              max="160"
+              step="4"
+              value={dualDeviceSpacing}
+              onChange={(e) =>
+                onDualDeviceSpacingChange(Number.parseInt(e.target.value, 10))
+              }
+              className="w-full"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>0px</span>
+              <span>160px</span>
+            </div>
+          </div>
+        )}
 
         {/* iPhone Settings */}
         {(activeDevice === "iphone" || activeDevice === "both") && (
