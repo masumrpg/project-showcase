@@ -73,6 +73,8 @@ export default function MockupScreenshotApp() {
   const [isDarkMode, setIsDarkMode] = useState(defaultSettings.isDarkMode);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showFullscreenSettings, setShowFullscreenSettings] = useState(false);
+  const [fullscreenSettingsTimeout, setFullscreenSettingsTimeout] = useState<NodeJS.Timeout | null>(null);
 
   // Helper functions to get current device settings
   const getCurrentDeviceScale = () => {
@@ -236,13 +238,74 @@ export default function MockupScreenshotApp() {
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isNowFullscreen = !!document.fullscreenElement;
+      setIsFullscreen(isNowFullscreen);
+      if (!isNowFullscreen) {
+        setShowFullscreenSettings(false);
+      }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () =>
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
+
+  // Handle mouse movement in fullscreen mode
+  useEffect(() => {
+    if (!isFullscreen) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX } = e;
+      const windowWidth = window.innerWidth;
+
+      // Show settings when mouse is on the left 20% of the screen
+      if (clientX < windowWidth * 0.2) {
+        setShowFullscreenSettings(true);
+
+        // Clear existing timeout
+        if (fullscreenSettingsTimeout) {
+          clearTimeout(fullscreenSettingsTimeout);
+        }
+
+        // Set new timeout to hide settings after 3 seconds
+        const timeout = setTimeout(() => {
+          setShowFullscreenSettings(false);
+        }, 3000);
+
+        setFullscreenSettingsTimeout(timeout);
+      }
+    };
+
+    const handleMouseLeave = () => {
+      setShowFullscreenSettings(false);
+      if (fullscreenSettingsTimeout) {
+        clearTimeout(fullscreenSettingsTimeout);
+      }
+    };
+
+    // Handle click outside to close settings
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Element;
+      const settingsPanel = document.querySelector('[data-fullscreen-settings="true"]');
+
+      if (showFullscreenSettings && settingsPanel && !settingsPanel.contains(target)) {
+        setShowFullscreenSettings(false);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('click', handleClickOutside);
+      if (fullscreenSettingsTimeout) {
+        clearTimeout(fullscreenSettingsTimeout);
+      }
+    };
+  }, [isFullscreen, fullscreenSettingsTimeout, showFullscreenSettings]);
 
   useEffect(() => {
     checkScrollPosition();
@@ -404,6 +467,14 @@ export default function MockupScreenshotApp() {
               isDarkMode={isDarkMode}
               currentTime={currentTime}
               gradientStyle={gradientStyle}
+              showFullscreenSettings={showFullscreenSettings}
+              onToggleFullscreenSettings={() => setShowFullscreenSettings(!showFullscreenSettings)}
+              onIphoneScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))}
+              onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
+              onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
+              onMacbookCornerRadiusChange={(radius) => setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))}
+              onIphoneDeviceScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))}
+              onMacbookDeviceScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))}
             />
           </div>
         </div>

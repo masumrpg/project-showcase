@@ -1,6 +1,14 @@
 import Image from "next/image";
-import { Wifi } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Wifi, X, Settings } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Smartphone, Laptop } from "lucide-react";
 
 interface MockupDisplayProps {
   activeDevice: string;
@@ -23,6 +31,14 @@ interface MockupDisplayProps {
   isDarkMode: boolean;
   currentTime: Date;
   gradientStyle: React.CSSProperties;
+  showFullscreenSettings: boolean;
+  onToggleFullscreenSettings: () => void;
+  onIphoneScaleChange: (scale: number) => void;
+  onMacbookScaleChange: (scale: number) => void;
+  onIphoneCornerRadiusChange: (radius: number) => void;
+  onMacbookCornerRadiusChange: (radius: number) => void;
+  onIphoneDeviceScaleChange: (scale: number) => void;
+  onMacbookDeviceScaleChange: (scale: number) => void;
 }
 
 export function MockupDisplay({
@@ -38,9 +54,21 @@ export function MockupDisplay({
   isDarkMode,
   currentTime,
   gradientStyle,
+  showFullscreenSettings,
+  onToggleFullscreenSettings,
+  onIphoneScaleChange,
+  onMacbookScaleChange,
+  onIphoneCornerRadiusChange,
+  onMacbookCornerRadiusChange,
+  onIphoneDeviceScaleChange,
+  onMacbookDeviceScaleChange,
 }: MockupDisplayProps) {
   const shadowFilter = shadowEnabled
-    ? `drop-shadow(0 ${shadowBlur / 2}px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})) drop-shadow(0 ${shadowSpread}px ${shadowSpread * 2}px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
+    ? `drop-shadow(0 ${
+        shadowBlur / 2
+      }px ${shadowBlur}px rgba(0, 0, 0, ${shadowOpacity})) drop-shadow(0 ${shadowSpread}px ${
+        shadowSpread * 2
+      }px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
     : "none";
 
   return (
@@ -60,7 +88,7 @@ export function MockupDisplay({
                 className="relative cursor-help"
                 style={{
                   filter: shadowFilter,
-                  transform: `scale(${iphoneSettings.deviceScale || 1})`
+                  transform: `scale(${iphoneSettings.deviceScale || 1})`,
                 }}
               >
                 <Image
@@ -72,14 +100,18 @@ export function MockupDisplay({
                     isFullscreen ? "max-h-[85vh]" : ""
                   }`}
                   style={{
-                    height: isFullscreen ? `${85 * (iphoneSettings.deviceScale || 1)}vh` : "auto",
+                    height: isFullscreen
+                      ? `${85 * (iphoneSettings.deviceScale || 1)}vh`
+                      : "auto",
                     width: "auto",
                   }}
                   priority
                 />
                 <div
                   className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                  style={{ borderRadius: `${iphoneSettings.cornerRadius ?? 50}px` }}
+                  style={{
+                    borderRadius: `${iphoneSettings.cornerRadius ?? 50}px`,
+                  }}
                 >
                   {/* iPhone Status Bar */}
                   <div
@@ -198,10 +230,13 @@ export function MockupDisplay({
       )}
 
       {activeDevice === "macbook" && (
-        <div className="relative" style={{
-          filter: shadowFilter,
-          transform: `scale(${macbookSettings.deviceScale || 1})`
-        }}>
+        <div
+          className="relative"
+          style={{
+            filter: shadowFilter,
+            transform: `scale(${macbookSettings.deviceScale || 1})`,
+          }}
+        >
           <Image
             src="/images/macbook-mockup.png"
             alt="MacBook Mockup"
@@ -211,7 +246,9 @@ export function MockupDisplay({
               isFullscreen ? "max-h-[85vh]" : ""
             }`}
             style={{
-              height: isFullscreen ? `${85 * (macbookSettings.deviceScale || 1)}vh` : "auto",
+              height: isFullscreen
+                ? `${85 * (macbookSettings.deviceScale || 1)}vh`
+                : "auto",
               width: "auto",
             }}
             priority
@@ -238,7 +275,11 @@ export function MockupDisplay({
 
       {activeDevice === "both" && (
         <TooltipProvider>
-          <div className={`flex flex-col lg:flex-row gap-8 items-center justify-center ${isFullscreen ? "h-[85vh]" : ""}`}>
+          <div
+            className={`flex flex-col lg:flex-row gap-8 items-center justify-center ${
+              isFullscreen ? "h-[85vh]" : ""
+            }`}
+          >
             {/* iPhone */}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -246,7 +287,7 @@ export function MockupDisplay({
                   className="relative cursor-help"
                   style={{
                     filter: shadowFilter,
-                    transform: `scale(${iphoneSettings.deviceScale || 1})`
+                    transform: `scale(${iphoneSettings.deviceScale || 1})`,
                   }}
                 >
                   <Image
@@ -258,19 +299,25 @@ export function MockupDisplay({
                       isFullscreen ? "max-h-[70vh]" : ""
                     }`}
                     style={{
-                      height: isFullscreen ? `${40 * (iphoneSettings.deviceScale || 1)}vh` : "auto",
+                      height: isFullscreen
+                        ? `${40 * (iphoneSettings.deviceScale || 1)}vh`
+                        : "auto",
                       width: "auto",
                     }}
                     priority
                   />
                   <div
                     className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                    style={{ borderRadius: `${iphoneSettings.cornerRadius ?? 50}px` }}
+                    style={{
+                      borderRadius: `${iphoneSettings.cornerRadius ?? 50}px`,
+                    }}
                   >
                     {/* iPhone Status Bar */}
                     <div
                       className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
-                        isDarkMode ? "text-white bg-black" : "text-black bg-white"
+                        isDarkMode
+                          ? "text-white bg-black"
+                          : "text-black bg-white"
                       }`}
                     >
                       {/* iPhone Notch */}
@@ -373,10 +420,13 @@ export function MockupDisplay({
             </Tooltip>
 
             {/* MacBook */}
-            <div className="relative" style={{
-              filter: shadowFilter,
-              transform: `scale(${macbookSettings.deviceScale || 1})`
-            }}>
+            <div
+              className="relative"
+              style={{
+                filter: shadowFilter,
+                transform: `scale(${macbookSettings.deviceScale || 1})`,
+              }}
+            >
               <Image
                 src="/images/macbook-mockup.png"
                 alt="MacBook Mockup"
@@ -386,14 +436,18 @@ export function MockupDisplay({
                   isFullscreen ? "max-h-[70vh]" : ""
                 }`}
                 style={{
-                  height: isFullscreen ? `${50 * (macbookSettings.deviceScale || 1)}vh` : "auto",
+                  height: isFullscreen
+                    ? `${50 * (macbookSettings.deviceScale || 1)}vh`
+                    : "auto",
                   width: "auto",
                 }}
                 priority
               />
               <div
                 className="absolute top-[6.2%] left-[11.2%] right-[11.1%] bottom-[10.5%] overflow-hidden"
-                style={{ borderRadius: `${macbookSettings.cornerRadius ?? 0}px` }}
+                style={{
+                  borderRadius: `${macbookSettings.cornerRadius ?? 0}px`,
+                }}
               >
                 <iframe
                   src={websiteUrl}
@@ -411,6 +465,220 @@ export function MockupDisplay({
             </div>
           </div>
         </TooltipProvider>
+      )}
+
+      {/* Fullscreen Settings Overlay */}
+      {isFullscreen && showFullscreenSettings && (
+        <div
+          data-fullscreen-settings="true"
+          className="fixed inset-y-0 left-0 w-96 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-r border-gray-200 dark:border-gray-700 z-50 overflow-y-auto"
+        >
+          <div className="p-6 space-y-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                <h2 className="text-lg font-semibold">Fullscreen Settings</h2>
+              </div>
+              <button
+                onClick={() => onToggleFullscreenSettings()}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Website URL */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Website URL</Label>
+              <input
+                type="url"
+                value={websiteUrl}
+                onChange={(e) => console.log("URL change:", e.target.value)}
+                className="w-full px-3 py-2 text-sm border rounded bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                disabled
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                URL cannot be changed in fullscreen mode
+              </p>
+            </div>
+
+            {/* iPhone Settings */}
+            {(activeDevice === "iphone" || activeDevice === "both") && (
+              <Card
+                className={`${isDarkMode ? "bg-gray-800 border-gray-700" : ""}`}
+              >
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Smartphone className="w-4 h-4" />
+                    iPhone Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Website Scale:{" "}
+                      {(iphoneSettings.websiteScale ?? 1).toFixed(1)}x
+                    </Label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="2"
+                      step="0.1"
+                      value={iphoneSettings.websiteScale ?? 1}
+                      onChange={(e) =>
+                        onIphoneScaleChange(Number.parseFloat(e.target.value))
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0.5x</span>
+                      <span>2.0x</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Corner Radius: {iphoneSettings.cornerRadius ?? 50}px
+                    </Label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      value={iphoneSettings.cornerRadius ?? 50}
+                      onChange={(e) =>
+                        onIphoneCornerRadiusChange(
+                          Number.parseInt(e.target.value)
+                        )
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0px</span>
+                      <span>50px</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Device Scale:{" "}
+                      {(iphoneSettings.deviceScale ?? 1).toFixed(1)}x
+                    </Label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="1.5"
+                      step="0.1"
+                      value={iphoneSettings.deviceScale ?? 1}
+                      onChange={(e) =>
+                        onIphoneDeviceScaleChange(
+                          Number.parseFloat(e.target.value)
+                        )
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0.5x</span>
+                      <span>1.5x</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* MacBook Settings */}
+            {(activeDevice === "macbook" || activeDevice === "both") && (
+              <Card
+                className={`${isDarkMode ? "bg-gray-800 border-gray-700" : ""}`}
+              >
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Laptop className="w-4 h-4" />
+                    MacBook Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Website Scale:{" "}
+                      {(macbookSettings.websiteScale ?? 1).toFixed(1)}x
+                    </Label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="2"
+                      step="0.1"
+                      value={macbookSettings.websiteScale ?? 1}
+                      onChange={(e) =>
+                        onMacbookScaleChange(Number.parseFloat(e.target.value))
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0.5x</span>
+                      <span>2.0x</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Corner Radius: {macbookSettings.cornerRadius ?? 0}px
+                    </Label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      value={macbookSettings.cornerRadius ?? 0}
+                      onChange={(e) =>
+                        onMacbookCornerRadiusChange(
+                          Number.parseInt(e.target.value)
+                        )
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0px</span>
+                      <span>50px</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm">
+                      Device Scale:{" "}
+                      {(macbookSettings.deviceScale ?? 1).toFixed(1)}x
+                    </Label>
+                    <input
+                      type="range"
+                      min="0.5"
+                      max="1.5"
+                      step="0.1"
+                      value={macbookSettings.deviceScale ?? 1}
+                      onChange={(e) =>
+                        onMacbookDeviceScaleChange(
+                          Number.parseFloat(e.target.value)
+                        )
+                      }
+                      className="w-full"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span>0.5x</span>
+                      <span>1.5x</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Instructions */}
+            <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+              <p>💡 Move mouse to the left edge to show/hide settings</p>
+              <p>⏱️ Settings auto-hide after 3 seconds</p>
+              <p>🖱️ Click X button or move mouse away to close</p>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
