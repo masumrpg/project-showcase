@@ -8,16 +8,20 @@ interface WebsiteSettingsProps {
   iphoneSettings: {
     websiteScale: number;
     cornerRadius: number;
+    deviceScale: number;
   };
   macbookSettings: {
     websiteScale: number;
     cornerRadius: number;
+    deviceScale: number;
   };
   onUrlChange: (url: string) => void;
   onIphoneScaleChange: (scale: number) => void;
   onMacbookScaleChange: (scale: number) => void;
   onIphoneCornerRadiusChange: (radius: number) => void;
   onMacbookCornerRadiusChange: (radius: number) => void;
+  onIphoneDeviceScaleChange: (scale: number) => void;
+  onMacbookDeviceScaleChange: (scale: number) => void;
   isDarkMode: boolean;
 }
 
@@ -31,6 +35,8 @@ export function WebsiteSettings({
   onMacbookScaleChange,
   onIphoneCornerRadiusChange,
   onMacbookCornerRadiusChange,
+  onIphoneDeviceScaleChange,
+  onMacbookDeviceScaleChange,
   isDarkMode,
 }: WebsiteSettingsProps) {
   return (
@@ -68,7 +74,7 @@ export function WebsiteSettings({
 
             <div className="space-y-2">
               <Label htmlFor="iphone-scale">
-                Website Scale: {iphoneSettings.websiteScale.toFixed(1)}x
+                Website Scale: {(iphoneSettings.websiteScale ?? 1).toFixed(1)}x
               </Label>
               <input
                 id="iphone-scale"
@@ -76,7 +82,7 @@ export function WebsiteSettings({
                 min="0.5"
                 max="2"
                 step="0.1"
-                value={iphoneSettings.websiteScale}
+                value={iphoneSettings.websiteScale ?? 1}
                 onChange={(e) => onIphoneScaleChange(Number.parseFloat(e.target.value))}
                 className="w-full"
               />
@@ -88,7 +94,7 @@ export function WebsiteSettings({
 
             <div className="space-y-2">
               <Label htmlFor="iphone-radius">
-                Corner Radius: {iphoneSettings.cornerRadius}px
+                Corner Radius: {(iphoneSettings.cornerRadius ?? 50)}px
               </Label>
               <input
                 id="iphone-radius"
@@ -96,13 +102,33 @@ export function WebsiteSettings({
                 min="0"
                 max="50"
                 step="1"
-                value={iphoneSettings.cornerRadius}
+                value={iphoneSettings.cornerRadius ?? 50}
                 onChange={(e) => onIphoneCornerRadiusChange(Number.parseInt(e.target.value))}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>0px</span>
                 <span>50px</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="iphone-device-scale">
+                Device Scale: {(iphoneSettings.deviceScale ?? 1).toFixed(1)}x
+              </Label>
+              <input
+                id="iphone-device-scale"
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.1"
+                value={iphoneSettings.deviceScale ?? 1}
+                onChange={(e) => onIphoneDeviceScaleChange(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>0.5x</span>
+                <span>1.5x</span>
               </div>
             </div>
           </div>
@@ -120,7 +146,7 @@ export function WebsiteSettings({
 
             <div className="space-y-2">
               <Label htmlFor="macbook-scale">
-                Website Scale: {macbookSettings.websiteScale.toFixed(1)}x
+                Website Scale: {(macbookSettings.websiteScale ?? 1).toFixed(1)}x
               </Label>
               <input
                 id="macbook-scale"
@@ -128,7 +154,7 @@ export function WebsiteSettings({
                 min="0.5"
                 max="2"
                 step="0.1"
-                value={macbookSettings.websiteScale}
+                value={macbookSettings.websiteScale ?? 1}
                 onChange={(e) => onMacbookScaleChange(Number.parseFloat(e.target.value))}
                 className="w-full"
               />
@@ -140,7 +166,7 @@ export function WebsiteSettings({
 
             <div className="space-y-2">
               <Label htmlFor="macbook-radius">
-                Corner Radius: {macbookSettings.cornerRadius}px
+                Corner Radius: {(macbookSettings.cornerRadius ?? 0)}px
               </Label>
               <input
                 id="macbook-radius"
@@ -148,13 +174,33 @@ export function WebsiteSettings({
                 min="0"
                 max="50"
                 step="1"
-                value={macbookSettings.cornerRadius}
+                value={macbookSettings.cornerRadius ?? 0}
                 onChange={(e) => onMacbookCornerRadiusChange(Number.parseInt(e.target.value))}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>0px</span>
                 <span>50px</span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="macbook-device-scale">
+                Device Scale: {(macbookSettings.deviceScale ?? 1).toFixed(1)}x
+              </Label>
+              <input
+                id="macbook-device-scale"
+                type="range"
+                min="0.5"
+                max="1.5"
+                step="0.1"
+                value={macbookSettings.deviceScale ?? 1}
+                onChange={(e) => onMacbookDeviceScaleChange(Number.parseFloat(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>0.5x</span>
+                <span>1.5x</span>
               </div>
             </div>
           </div>

@@ -8,10 +8,12 @@ interface MockupDisplayProps {
   iphoneSettings: {
     websiteScale: number;
     cornerRadius: number;
+    deviceScale: number;
   };
   macbookSettings: {
     websiteScale: number;
     cornerRadius: number;
+    deviceScale: number;
   };
   shadowEnabled: boolean;
   shadowBlur: number;
@@ -56,7 +58,10 @@ export function MockupDisplay({
             <TooltipTrigger asChild>
               <div
                 className="relative cursor-help"
-                style={{ filter: shadowFilter }}
+                style={{
+                  filter: shadowFilter,
+                  transform: `scale(${iphoneSettings.deviceScale || 1})`
+                }}
               >
                 <Image
                   src="/images/iphone-mockup.png"
@@ -67,14 +72,14 @@ export function MockupDisplay({
                     isFullscreen ? "max-h-[85vh]" : ""
                   }`}
                   style={{
-                    height: isFullscreen ? "85vh" : "auto",
+                    height: isFullscreen ? `${85 * (iphoneSettings.deviceScale || 1)}vh` : "auto",
                     width: "auto",
                   }}
                   priority
                 />
                 <div
                   className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                  style={{ borderRadius: `${iphoneSettings.cornerRadius}px` }}
+                  style={{ borderRadius: `${iphoneSettings.cornerRadius ?? 50}px` }}
                 >
                   {/* iPhone Status Bar */}
                   <div
@@ -193,7 +198,10 @@ export function MockupDisplay({
       )}
 
       {activeDevice === "macbook" && (
-        <div className="relative" style={{ filter: shadowFilter }}>
+        <div className="relative" style={{
+          filter: shadowFilter,
+          transform: `scale(${macbookSettings.deviceScale || 1})`
+        }}>
           <Image
             src="/images/macbook-mockup.png"
             alt="MacBook Mockup"
@@ -203,14 +211,14 @@ export function MockupDisplay({
               isFullscreen ? "max-h-[85vh]" : ""
             }`}
             style={{
-              height: isFullscreen ? "85vh" : "auto",
+              height: isFullscreen ? `${85 * (macbookSettings.deviceScale || 1)}vh` : "auto",
               width: "auto",
             }}
             priority
           />
           <div
             className="absolute top-[6.2%] left-[11.2%] right-[11.1%] bottom-[10.5%] overflow-hidden"
-            style={{ borderRadius: `${macbookSettings.cornerRadius}px` }}
+            style={{ borderRadius: `${macbookSettings.cornerRadius ?? 0}px` }}
           >
             <iframe
               src={websiteUrl}
@@ -236,7 +244,10 @@ export function MockupDisplay({
               <TooltipTrigger asChild>
                 <div
                   className="relative cursor-help"
-                  style={{ filter: shadowFilter }}
+                  style={{
+                    filter: shadowFilter,
+                    transform: `scale(${iphoneSettings.deviceScale || 1})`
+                  }}
                 >
                   <Image
                     src="/images/iphone-mockup.png"
@@ -247,14 +258,14 @@ export function MockupDisplay({
                       isFullscreen ? "max-h-[70vh]" : ""
                     }`}
                     style={{
-                      height: isFullscreen ? "40vh" : "auto",
+                      height: isFullscreen ? `${40 * (iphoneSettings.deviceScale || 1)}vh` : "auto",
                       width: "auto",
                     }}
                     priority
                   />
                   <div
                     className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                    style={{ borderRadius: `${iphoneSettings.cornerRadius}px` }}
+                    style={{ borderRadius: `${iphoneSettings.cornerRadius ?? 50}px` }}
                   >
                     {/* iPhone Status Bar */}
                     <div
@@ -362,7 +373,10 @@ export function MockupDisplay({
             </Tooltip>
 
             {/* MacBook */}
-            <div className="relative" style={{ filter: shadowFilter }}>
+            <div className="relative" style={{
+              filter: shadowFilter,
+              transform: `scale(${macbookSettings.deviceScale || 1})`
+            }}>
               <Image
                 src="/images/macbook-mockup.png"
                 alt="MacBook Mockup"
@@ -372,14 +386,14 @@ export function MockupDisplay({
                   isFullscreen ? "max-h-[70vh]" : ""
                 }`}
                 style={{
-                  height: isFullscreen ? "50vh" : "auto",
+                  height: isFullscreen ? `${50 * (macbookSettings.deviceScale || 1)}vh` : "auto",
                   width: "auto",
                 }}
                 priority
               />
               <div
                 className="absolute top-[6.2%] left-[11.2%] right-[11.1%] bottom-[10.5%] overflow-hidden"
-                style={{ borderRadius: `${macbookSettings.cornerRadius}px` }}
+                style={{ borderRadius: `${macbookSettings.cornerRadius ?? 0}px` }}
               >
                 <iframe
                   src={websiteUrl}

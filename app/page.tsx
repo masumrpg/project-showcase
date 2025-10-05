@@ -23,10 +23,12 @@ export default function MockupScreenshotApp() {
     iphoneSettings: {
       websiteScale: 1,
       cornerRadius: 50,
+      deviceScale: 1,
     },
     macbookSettings: {
       websiteScale: 1,
       cornerRadius: 0,
+      deviceScale: 1,
     },
     shadowEnabled: true,
     shadowBlur: 40,
@@ -85,6 +87,12 @@ export default function MockupScreenshotApp() {
     return { iphone: iphoneSettings.cornerRadius, macbook: macbookSettings.cornerRadius };
   };
 
+  const getCurrentDeviceScale2 = () => {
+    if (activeDevice === "iphone") return iphoneSettings.deviceScale;
+    if (activeDevice === "macbook") return macbookSettings.deviceScale;
+    return { iphone: iphoneSettings.deviceScale, macbook: macbookSettings.deviceScale };
+  };
+
   // Load settings from localStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -103,12 +111,16 @@ export default function MockupScreenshotApp() {
             settings.activeDevice || defaultSettings.activeDevice
           );
           setWebsiteUrl(settings.websiteUrl || defaultSettings.websiteUrl);
-          setIphoneSettings(
-            settings.iphoneSettings || defaultSettings.iphoneSettings
-          );
-          setMacbookSettings(
-            settings.macbookSettings || defaultSettings.macbookSettings
-          );
+          setIphoneSettings({
+            websiteScale: settings.iphoneSettings?.websiteScale ?? defaultSettings.iphoneSettings.websiteScale,
+            cornerRadius: settings.iphoneSettings?.cornerRadius ?? defaultSettings.iphoneSettings.cornerRadius,
+            deviceScale: settings.iphoneSettings?.deviceScale ?? defaultSettings.iphoneSettings.deviceScale,
+          });
+          setMacbookSettings({
+            websiteScale: settings.macbookSettings?.websiteScale ?? defaultSettings.macbookSettings.websiteScale,
+            cornerRadius: settings.macbookSettings?.cornerRadius ?? defaultSettings.macbookSettings.cornerRadius,
+            deviceScale: settings.macbookSettings?.deviceScale ?? defaultSettings.macbookSettings.deviceScale,
+          });
           setShadowEnabled(
             settings.shadowEnabled !== undefined
               ? settings.shadowEnabled
@@ -323,6 +335,8 @@ export default function MockupScreenshotApp() {
                   onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
                   onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
                   onMacbookCornerRadiusChange={(radius) => setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))}
+                  onIphoneDeviceScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))}
+                  onMacbookDeviceScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))}
                   isDarkMode={isDarkMode}
                 />
 
