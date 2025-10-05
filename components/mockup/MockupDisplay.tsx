@@ -5,8 +5,14 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 interface MockupDisplayProps {
   activeDevice: string;
   websiteUrl: string;
-  websiteScale: number;
-  cornerRadius: number;
+  iphoneSettings: {
+    websiteScale: number;
+    cornerRadius: number;
+  };
+  macbookSettings: {
+    websiteScale: number;
+    cornerRadius: number;
+  };
   shadowEnabled: boolean;
   shadowBlur: number;
   shadowSpread: number;
@@ -20,8 +26,8 @@ interface MockupDisplayProps {
 export function MockupDisplay({
   activeDevice,
   websiteUrl,
-  websiteScale,
-  cornerRadius,
+  iphoneSettings,
+  macbookSettings,
   shadowEnabled,
   shadowBlur,
   shadowSpread,
@@ -68,7 +74,7 @@ export function MockupDisplay({
                 />
                 <div
                   className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
-                  style={{ borderRadius: `${cornerRadius}px` }}
+                  style={{ borderRadius: `${iphoneSettings.cornerRadius}px` }}
                 >
                   {/* iPhone Status Bar */}
                   <div
@@ -158,9 +164,9 @@ export function MockupDisplay({
                     allow="cookies *"
                     allowFullScreen
                     style={{
-                      transform: `scale(${websiteScale})`,
-                      width: `${100 / websiteScale}%`,
-                      height: `${100 / websiteScale}%`,
+                      transform: `scale(${iphoneSettings.websiteScale})`,
+                      width: `${100 / iphoneSettings.websiteScale}%`,
+                      height: `${100 / iphoneSettings.websiteScale}%`,
                       marginTop: "44px",
                       overflow: "hidden",
                       scrollbarWidth: "none",
@@ -204,7 +210,7 @@ export function MockupDisplay({
           />
           <div
             className="absolute top-[6.2%] left-[11.2%] right-[11.1%] bottom-[10.5%] overflow-hidden"
-            style={{ borderRadius: `${cornerRadius}px` }}
+            style={{ borderRadius: `${macbookSettings.cornerRadius}px` }}
           >
             <iframe
               src={websiteUrl}
@@ -213,13 +219,184 @@ export function MockupDisplay({
               allow="cookies *"
               allowFullScreen
               style={{
-                transform: `scale(${websiteScale})`,
-                width: `${100 / websiteScale}%`,
-                height: `${100 / websiteScale}%`,
+                transform: `scale(${macbookSettings.websiteScale})`,
+                width: `${100 / macbookSettings.websiteScale}%`,
+                height: `${100 / macbookSettings.websiteScale}%`,
               }}
             />
           </div>
         </div>
+      )}
+
+      {activeDevice === "both" && (
+        <TooltipProvider>
+          <div className={`flex flex-col lg:flex-row gap-8 items-center justify-center ${isFullscreen ? "h-[85vh]" : ""}`}>
+            {/* iPhone */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div
+                  className="relative cursor-help"
+                  style={{ filter: shadowFilter }}
+                >
+                  <Image
+                    src="/images/iphone-mockup.png"
+                    alt="iPhone Mockup"
+                    width={240}
+                    height={480}
+                    className={`max-w-full h-auto ${
+                      isFullscreen ? "max-h-[70vh]" : ""
+                    }`}
+                    style={{
+                      height: isFullscreen ? "40vh" : "auto",
+                      width: "auto",
+                    }}
+                    priority
+                  />
+                  <div
+                    className="absolute top-[2.4%] left-[5.5%] right-[5.5%] bottom-[2.5%] overflow-hidden"
+                    style={{ borderRadius: `${iphoneSettings.cornerRadius}px` }}
+                  >
+                    {/* iPhone Status Bar */}
+                    <div
+                      className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
+                        isDarkMode ? "text-white bg-black" : "text-black bg-white"
+                      }`}
+                    >
+                      {/* iPhone Notch */}
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 rounded-b-3xl bg-black border-2 border-gray-900">
+                        {/* Speaker grille */}
+                        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-14 h-1 rounded-full bg-gray-800" />
+                        {/* Camera */}
+                        <div className="absolute top-1.5 right-7 w-2.5 h-2.5 rounded-full bg-gray-900" />
+                      </div>
+
+                      {/* Left side - Time */}
+                      <div className="flex items-center">
+                        <span className="font-semibold">
+                          {currentTime.toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
+                        </span>
+                      </div>
+
+                      {/* Right side - Status indicators */}
+                      <div className="flex items-center space-x-1">
+                        {/* Signal strength */}
+                        <div className="flex items-center space-x-0.5">
+                          <div
+                            className={`w-1 h-1 rounded-full ${
+                              isDarkMode ? "bg-white" : "bg-black"
+                            }`}
+                          />
+                          <div
+                            className={`w-1 h-1.5 rounded-full ${
+                              isDarkMode ? "bg-white" : "bg-black"
+                            }`}
+                          />
+                          <div
+                            className={`w-1 h-2 rounded-full ${
+                              isDarkMode ? "bg-white" : "bg-black"
+                            }`}
+                          />
+                          <div
+                            className={`w-1 h-2.5 rounded-full ${
+                              isDarkMode ? "bg-white" : "bg-black"
+                            }`}
+                          />
+                        </div>
+
+                        {/* WiFi icon */}
+                        <Wifi
+                          className={`w-4 h-4 ${
+                            isDarkMode ? "text-white" : "text-black"
+                          }`}
+                        />
+
+                        {/* Battery */}
+                        <div className="flex items-center">
+                          <div
+                            className={`w-6 h-3 border rounded-sm relative ${
+                              isDarkMode ? "border-white" : "border-black"
+                            }`}
+                          >
+                            <div
+                              className={`absolute inset-0.5 rounded-sm ${
+                                isDarkMode ? "bg-white" : "bg-black"
+                              }`}
+                              style={{ width: "85%" }}
+                            />
+                          </div>
+                          <div
+                            className={`w-0.5 h-1.5 rounded-r-sm ml-0.5 ${
+                              isDarkMode ? "bg-white" : "bg-black"
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <iframe
+                      src={websiteUrl}
+                      className="w-full h-full border-0 bg-white origin-top-left"
+                      title="Website Preview - iPhone"
+                      allow="cookies *"
+                      allowFullScreen
+                      style={{
+                        transform: `scale(${iphoneSettings.websiteScale})`,
+                        width: `${100 / iphoneSettings.websiteScale}%`,
+                        height: `${100 / iphoneSettings.websiteScale}%`,
+                        marginTop: "44px",
+                        overflow: "hidden",
+                        scrollbarWidth: "none",
+                        msOverflowStyle: "none",
+                      }}
+                    />
+                  </div>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-xs">
+                <p className="text-sm">iPhone Mockup</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* MacBook */}
+            <div className="relative" style={{ filter: shadowFilter }}>
+              <Image
+                src="/images/macbook-mockup.png"
+                alt="MacBook Mockup"
+                width={640}
+                height={400}
+                className={`max-w-full h-auto ${
+                  isFullscreen ? "max-h-[70vh]" : ""
+                }`}
+                style={{
+                  height: isFullscreen ? "50vh" : "auto",
+                  width: "auto",
+                }}
+                priority
+              />
+              <div
+                className="absolute top-[6.2%] left-[11.2%] right-[11.1%] bottom-[10.5%] overflow-hidden"
+                style={{ borderRadius: `${macbookSettings.cornerRadius}px` }}
+              >
+                <iframe
+                  src={websiteUrl}
+                  className="w-full h-full border-0 bg-white origin-top-left"
+                  title="Website Preview - MacBook"
+                  allow="cookies *"
+                  allowFullScreen
+                  style={{
+                    transform: `scale(${macbookSettings.websiteScale})`,
+                    width: `${100 / macbookSettings.websiteScale}%`,
+                    height: `${100 / macbookSettings.websiteScale}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </TooltipProvider>
       )}
     </div>
   );

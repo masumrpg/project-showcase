@@ -20,8 +20,14 @@ export default function MockupScreenshotApp() {
     gradientDirection: "135deg",
     activeDevice: "iphone",
     websiteUrl: "https://example.com",
-    websiteScale: 1,
-    cornerRadius: 50,
+    iphoneSettings: {
+      websiteScale: 1,
+      cornerRadius: 50,
+    },
+    macbookSettings: {
+      websiteScale: 1,
+      cornerRadius: 0,
+    },
     shadowEnabled: true,
     shadowBlur: 40,
     shadowSpread: 0,
@@ -44,11 +50,11 @@ export default function MockupScreenshotApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [websiteUrl, setWebsiteUrl] = useState(defaultSettings.websiteUrl);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [websiteScale, setWebsiteScale] = useState(
-    defaultSettings.websiteScale
+  const [iphoneSettings, setIphoneSettings] = useState(
+    defaultSettings.iphoneSettings
   );
-  const [cornerRadius, setCornerRadius] = useState(
-    defaultSettings.cornerRadius
+  const [macbookSettings, setMacbookSettings] = useState(
+    defaultSettings.macbookSettings
   );
   const [shadowEnabled, setShadowEnabled] = useState(
     defaultSettings.shadowEnabled
@@ -65,6 +71,19 @@ export default function MockupScreenshotApp() {
   const [isDarkMode, setIsDarkMode] = useState(defaultSettings.isDarkMode);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoaded, setIsLoaded] = useState(false);
+
+  // Helper functions to get current device settings
+  const getCurrentDeviceScale = () => {
+    if (activeDevice === "iphone") return iphoneSettings.websiteScale;
+    if (activeDevice === "macbook") return macbookSettings.websiteScale;
+    return { iphone: iphoneSettings.websiteScale, macbook: macbookSettings.websiteScale };
+  };
+
+  const getCurrentDeviceRadius = () => {
+    if (activeDevice === "iphone") return iphoneSettings.cornerRadius;
+    if (activeDevice === "macbook") return macbookSettings.cornerRadius;
+    return { iphone: iphoneSettings.cornerRadius, macbook: macbookSettings.cornerRadius };
+  };
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -84,11 +103,11 @@ export default function MockupScreenshotApp() {
             settings.activeDevice || defaultSettings.activeDevice
           );
           setWebsiteUrl(settings.websiteUrl || defaultSettings.websiteUrl);
-          setWebsiteScale(
-            settings.websiteScale || defaultSettings.websiteScale
+          setIphoneSettings(
+            settings.iphoneSettings || defaultSettings.iphoneSettings
           );
-          setCornerRadius(
-            settings.cornerRadius || defaultSettings.cornerRadius
+          setMacbookSettings(
+            settings.macbookSettings || defaultSettings.macbookSettings
           );
           setShadowEnabled(
             settings.shadowEnabled !== undefined
@@ -137,8 +156,8 @@ export default function MockupScreenshotApp() {
           gradientDirection,
           activeDevice,
           websiteUrl,
-          websiteScale,
-          cornerRadius,
+          iphoneSettings,
+          macbookSettings,
           shadowEnabled,
           shadowBlur,
           shadowSpread,
@@ -163,8 +182,8 @@ export default function MockupScreenshotApp() {
     setGradientDirection(defaultSettings.gradientDirection);
     setActiveDevice(defaultSettings.activeDevice);
     setWebsiteUrl(defaultSettings.websiteUrl);
-    setWebsiteScale(defaultSettings.websiteScale);
-    setCornerRadius(defaultSettings.cornerRadius);
+    setIphoneSettings(defaultSettings.iphoneSettings);
+    setMacbookSettings(defaultSettings.macbookSettings);
     setShadowEnabled(defaultSettings.shadowEnabled);
     setShadowBlur(defaultSettings.shadowBlur);
     setShadowSpread(defaultSettings.shadowSpread);
@@ -217,10 +236,6 @@ export default function MockupScreenshotApp() {
     checkScrollPosition();
   }, []);
 
-  useEffect(() => {
-    setCornerRadius(activeDevice === "iphone" ? 50 : 0);
-  }, [activeDevice]);
-
   // Save settings whenever any setting changes (but only after loaded)
   useEffect(() => {
     if (isLoaded) {
@@ -232,8 +247,8 @@ export default function MockupScreenshotApp() {
     gradientDirection,
     activeDevice,
     websiteUrl,
-    websiteScale,
-    cornerRadius,
+    iphoneSettings,
+    macbookSettings,
     shadowEnabled,
     shadowBlur,
     shadowSpread,
@@ -300,11 +315,14 @@ export default function MockupScreenshotApp() {
 
                 <WebsiteSettings
                   websiteUrl={websiteUrl}
-                  websiteScale={websiteScale}
-                  cornerRadius={cornerRadius}
+                  activeDevice={activeDevice}
+                  iphoneSettings={iphoneSettings}
+                  macbookSettings={macbookSettings}
                   onUrlChange={setWebsiteUrl}
-                  onScaleChange={setWebsiteScale}
-                  onCornerRadiusChange={setCornerRadius}
+                  onIphoneScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))}
+                  onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
+                  onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
+                  onMacbookCornerRadiusChange={(radius) => setMacbookSettings(prev => ({ ...prev, cornerRadius: radius }))}
                   isDarkMode={isDarkMode}
                 />
 
@@ -362,8 +380,8 @@ export default function MockupScreenshotApp() {
             <MockupDisplay
               activeDevice={activeDevice}
               websiteUrl={websiteUrl}
-              websiteScale={websiteScale}
-              cornerRadius={cornerRadius}
+              iphoneSettings={iphoneSettings}
+              macbookSettings={macbookSettings}
               shadowEnabled={shadowEnabled}
               shadowBlur={shadowBlur}
               shadowSpread={shadowSpread}

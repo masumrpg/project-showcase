@@ -1,4 +1,4 @@
-import { Smartphone, Laptop } from "lucide-react";
+import { Smartphone, Laptop, Monitor } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -8,7 +8,11 @@ interface DeviceSelectorProps {
   isDarkMode: boolean;
 }
 
-export function DeviceSelector({ activeDevice, onDeviceChange, isDarkMode }: DeviceSelectorProps) {
+export function DeviceSelector({
+  activeDevice,
+  onDeviceChange,
+  isDarkMode,
+}: DeviceSelectorProps) {
   return (
     <Card className={isDarkMode ? "bg-gray-800 border-gray-700" : ""}>
       <CardHeader>
@@ -19,14 +23,15 @@ export function DeviceSelector({ activeDevice, onDeviceChange, isDarkMode }: Dev
       </CardHeader>
       <CardContent>
         <Tabs value={activeDevice} onValueChange={onDeviceChange}>
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="iphone" className="flex items-center gap-2">
               <Smartphone className="w-4 h-4" />
-              iPhone
             </TabsTrigger>
             <TabsTrigger value="macbook" className="flex items-center gap-2">
               <Laptop className="w-4 h-4" />
-              MacBook
+            </TabsTrigger>
+            <TabsTrigger value="both" className="flex items-center gap-2">
+              <Monitor className="w-4 h-4" />
             </TabsTrigger>
           </TabsList>
         </Tabs>
