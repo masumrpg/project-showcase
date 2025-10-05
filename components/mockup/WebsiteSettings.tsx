@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Smartphone, Laptop } from "lucide-react";
+import { Smartphone, Laptop, RefreshCw } from "lucide-react";
 
 interface WebsiteSettingsProps {
   websiteUrl: string;
@@ -16,6 +16,7 @@ interface WebsiteSettingsProps {
     deviceScale: number;
   };
   onUrlChange: (url: string) => void;
+  onRefreshWebsite: () => void;
   onIphoneScaleChange: (scale: number) => void;
   onMacbookScaleChange: (scale: number) => void;
   onIphoneCornerRadiusChange: (radius: number) => void;
@@ -31,6 +32,7 @@ export function WebsiteSettings({
   iphoneSettings,
   macbookSettings,
   onUrlChange,
+  onRefreshWebsite,
   onIphoneScaleChange,
   onMacbookScaleChange,
   onIphoneCornerRadiusChange,
@@ -48,18 +50,27 @@ export function WebsiteSettings({
         {/* Website URL - Shared */}
         <div className="space-y-2">
           <Label htmlFor="website-url">Enter Website URL</Label>
-          <input
-            id="website-url"
-            type="url"
-            value={websiteUrl}
-            onChange={(e) => onUrlChange(e.target.value)}
-            className={`w-full px-3 py-2 border rounded text-sm ${
-              isDarkMode
-                ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                : ""
-            }`}
-            placeholder="https://example.com"
-          />
+          <div className="flex gap-2">
+            <input
+              id="website-url"
+              type="url"
+              value={websiteUrl}
+              onChange={(e) => onUrlChange(e.target.value)}
+              className={`flex-1 px-3 py-2 border rounded text-sm ${
+                isDarkMode
+                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                  : ""
+              }`}
+              placeholder="https://example.com"
+            />
+            <button
+              onClick={onRefreshWebsite}
+              className="px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors flex items-center gap-2"
+              title="Refresh Website"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* iPhone Settings */}

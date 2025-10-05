@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Wifi, X, Settings } from "lucide-react";
+import { Wifi, X, Settings, RefreshCw } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -31,8 +31,10 @@ interface MockupDisplayProps {
   isDarkMode: boolean;
   currentTime: Date;
   gradientStyle: React.CSSProperties;
+  refreshKey: number;
   showFullscreenSettings: boolean;
   onToggleFullscreenSettings: () => void;
+  onRefreshWebsite: () => void;
   onIphoneScaleChange: (scale: number) => void;
   onMacbookScaleChange: (scale: number) => void;
   onIphoneCornerRadiusChange: (radius: number) => void;
@@ -54,8 +56,10 @@ export function MockupDisplay({
   isDarkMode,
   currentTime,
   gradientStyle,
+  refreshKey,
   showFullscreenSettings,
   onToggleFullscreenSettings,
+  onRefreshWebsite,
   onIphoneScaleChange,
   onMacbookScaleChange,
   onIphoneCornerRadiusChange,
@@ -195,7 +199,7 @@ export function MockupDisplay({
                   </div>
 
                   <iframe
-                    src={websiteUrl}
+                    src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
                     className="w-full h-full border-0 bg-white origin-top-left"
                     title="Website Preview"
                     allow="cookies *"
@@ -258,7 +262,7 @@ export function MockupDisplay({
             style={{ borderRadius: `${macbookSettings.cornerRadius ?? 0}px` }}
           >
             <iframe
-              src={websiteUrl}
+              src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
               className="w-full h-full border-0 bg-white origin-top-left"
               title="Website Preview"
               allow="cookies *"
@@ -396,7 +400,7 @@ export function MockupDisplay({
                     </div>
 
                     <iframe
-                      src={websiteUrl}
+                      src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
                       className="w-full h-full border-0 bg-white origin-top-left"
                       title="Website Preview - iPhone"
                       allow="cookies *"
@@ -450,7 +454,7 @@ export function MockupDisplay({
                 }}
               >
                 <iframe
-                  src={websiteUrl}
+                  src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
                   className="w-full h-full border-0 bg-white origin-top-left"
                   title="Website Preview - MacBook"
                   allow="cookies *"
@@ -491,15 +495,24 @@ export function MockupDisplay({
             {/* Website URL */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">Website URL</Label>
-              <input
-                type="url"
-                value={websiteUrl}
-                onChange={(e) => console.log("URL change:", e.target.value)}
-                className="w-full px-3 py-2 text-sm border rounded bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
-                disabled
-              />
+              <div className="flex gap-2">
+                <input
+                  type="url"
+                  value={websiteUrl}
+                  onChange={(e) => console.log("URL change:", e.target.value)}
+                  className="flex-1 px-3 py-2 text-sm border rounded bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white"
+                  disabled
+                />
+                <button
+                  onClick={onRefreshWebsite}
+                  className="px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors flex items-center gap-2"
+                  title="Refresh Website"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </button>
+              </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                URL cannot be changed in fullscreen mode
+                URL cannot be changed in fullscreen mode, but you can refresh the website
               </p>
             </div>
 

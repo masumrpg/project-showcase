@@ -75,6 +75,7 @@ export default function MockupScreenshotApp() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFullscreenSettings, setShowFullscreenSettings] = useState(false);
   const [fullscreenSettingsTimeout, setFullscreenSettingsTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Helper functions to get current device settings
   const getCurrentDeviceScale = () => {
@@ -226,6 +227,10 @@ export default function MockupScreenshotApp() {
     } catch (error) {
       console.error("Fullscreen failed:", error);
     }
+  };
+
+  const refreshWebsite = () => {
+    setRefreshKey(prev => prev + 1);
   };
 
   const checkScrollPosition = () => {
@@ -394,6 +399,7 @@ export default function MockupScreenshotApp() {
                   iphoneSettings={iphoneSettings}
                   macbookSettings={macbookSettings}
                   onUrlChange={setWebsiteUrl}
+                  onRefreshWebsite={refreshWebsite}
                   onIphoneScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))}
                   onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
                   onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
@@ -467,8 +473,10 @@ export default function MockupScreenshotApp() {
               isDarkMode={isDarkMode}
               currentTime={currentTime}
               gradientStyle={gradientStyle}
+              refreshKey={refreshKey}
               showFullscreenSettings={showFullscreenSettings}
               onToggleFullscreenSettings={() => setShowFullscreenSettings(!showFullscreenSettings)}
+              onRefreshWebsite={refreshWebsite}
               onIphoneScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, websiteScale: scale }))}
               onMacbookScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, websiteScale: scale }))}
               onIphoneCornerRadiusChange={(radius) => setIphoneSettings(prev => ({ ...prev, cornerRadius: radius }))}
