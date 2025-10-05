@@ -2,6 +2,7 @@ export { LoadingScreen } from "./LoadingScreen";
 export { DeviceSelector } from "./DeviceSelector";
 export { WebsiteSettings } from "./WebsiteSettings";
 export { ShadowControls } from "./ShadowControls";
+export { BackgroundImageControls } from "./BackgroundImageControls";
 export { GradientControls } from "./GradientControls";
 export { ActionButtons } from "./ActionButtons";
 export { MockupDisplay } from "./MockupDisplay";

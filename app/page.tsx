@@ -7,11 +7,13 @@ import {
   DeviceSelector,
   WebsiteSettings,
   ShadowControls,
+  BackgroundImageControls,
   GradientControls,
   ActionButtons,
   MockupDisplay,
   PresetGradients,
 } from "@/components/mockup";
+import type { BackgroundImageSettings } from "@/components/mockup/types";
 
 export default function MockupScreenshotApp() {
   const defaultSettings = {
@@ -36,6 +38,14 @@ export default function MockupScreenshotApp() {
     shadowSpread: 0,
     shadowOpacity: 0.3,
     isDarkMode: false,
+    backgroundImageSettings: {
+      enabled: false,
+      imageData: "",
+      offsetX: 0,
+      offsetY: 0,
+      scale: 1,
+      rotation: 0,
+    } as BackgroundImageSettings,
   };
 
   // Initialize with default values first
@@ -75,6 +85,10 @@ export default function MockupScreenshotApp() {
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(defaultSettings.isDarkMode);
+  const [backgroundImageSettings, setBackgroundImageSettings] =
+    useState<BackgroundImageSettings>(() => ({
+      ...defaultSettings.backgroundImageSettings,
+    }));
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFullscreenSettings, setShowFullscreenSettings] = useState(false);
@@ -149,6 +163,27 @@ export default function MockupScreenshotApp() {
               : defaultSettings.isDarkMode
           );
 
+          setBackgroundImageSettings({
+            enabled:
+              settings.backgroundImageSettings?.enabled ??
+              defaultSettings.backgroundImageSettings.enabled,
+            imageData:
+              settings.backgroundImageSettings?.imageData ??
+              defaultSettings.backgroundImageSettings.imageData,
+            offsetX:
+              settings.backgroundImageSettings?.offsetX ??
+              defaultSettings.backgroundImageSettings.offsetX,
+            offsetY:
+              settings.backgroundImageSettings?.offsetY ??
+              defaultSettings.backgroundImageSettings.offsetY,
+            scale:
+              settings.backgroundImageSettings?.scale ??
+              defaultSettings.backgroundImageSettings.scale,
+            rotation:
+              settings.backgroundImageSettings?.rotation ??
+              defaultSettings.backgroundImageSettings.rotation,
+          });
+
           // Apply dark mode immediately if stored
           if (settings.isDarkMode) {
             document.documentElement.classList.add("dark");
@@ -186,6 +221,7 @@ export default function MockupScreenshotApp() {
           shadowSpread,
           shadowOpacity,
           isDarkMode,
+          backgroundImageSettings,
         };
         localStorage.setItem("mockupSettings", JSON.stringify(currentSettings));
       } catch (error) {
@@ -213,6 +249,7 @@ export default function MockupScreenshotApp() {
     setShadowSpread(defaultSettings.shadowSpread);
     setShadowOpacity(defaultSettings.shadowOpacity);
     setIsDarkMode(defaultSettings.isDarkMode);
+    setBackgroundImageSettings({ ...defaultSettings.backgroundImageSettings });
 
     // Clear localStorage
     if (typeof window !== "undefined") {
@@ -344,6 +381,7 @@ export default function MockupScreenshotApp() {
     shadowSpread,
     shadowOpacity,
     isDarkMode,
+    backgroundImageSettings,
     isLoaded,
   ]);
 
@@ -445,6 +483,23 @@ export default function MockupScreenshotApp() {
                   isDarkMode={isDarkMode}
                 />
 
+                <BackgroundImageControls
+                  settings={backgroundImageSettings}
+                  onUpdate={(updates) =>
+                    setBackgroundImageSettings(prev => ({
+                      ...prev,
+                      ...updates,
+                    }))
+                  }
+                  onClear={() =>
+                    setBackgroundImageSettings({
+                      ...defaultSettings.backgroundImageSettings,
+                    })
+                  }
+                  isDarkMode={isDarkMode}
+                  idPrefix="background-main"
+                />
+
                 <GradientControls
                   gradientStart={gradientStart}
                   gradientEnd={gradientEnd}
@@ -494,6 +549,7 @@ export default function MockupScreenshotApp() {
               shadowBlur={shadowBlur}
               shadowSpread={shadowSpread}
               shadowOpacity={shadowOpacity}
+              backgroundImageSettings={backgroundImageSettings}
               isFullscreen={isFullscreen}
               isDarkMode={isDarkMode}
               currentTime={currentTime}
@@ -509,6 +565,17 @@ export default function MockupScreenshotApp() {
               onIphoneDeviceScaleChange={(scale) => setIphoneSettings(prev => ({ ...prev, deviceScale: scale }))}
               onMacbookDeviceScaleChange={(scale) => setMacbookSettings(prev => ({ ...prev, deviceScale: scale }))}
               onDualDeviceSpacingChange={setDualDeviceSpacing}
+              onBackgroundImageUpdate={(updates) =>
+                setBackgroundImageSettings(prev => ({
+                  ...prev,
+                  ...updates,
+                }))
+              }
+              onBackgroundImageClear={() =>
+                setBackgroundImageSettings({
+                  ...defaultSettings.backgroundImageSettings,
+                })
+              }
             />
           </div>
         </div>

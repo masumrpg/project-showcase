@@ -9,6 +9,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Smartphone, Laptop } from "lucide-react";
+import type { BackgroundImageSettings } from "./types";
+import { BackgroundImageControls } from "./BackgroundImageControls";
 
 interface MockupDisplayProps {
   activeDevice: string;
@@ -28,6 +30,7 @@ interface MockupDisplayProps {
   shadowBlur: number;
   shadowSpread: number;
   shadowOpacity: number;
+  backgroundImageSettings: BackgroundImageSettings;
   isFullscreen: boolean;
   isDarkMode: boolean;
   currentTime: Date;
@@ -43,6 +46,10 @@ interface MockupDisplayProps {
   onIphoneDeviceScaleChange: (scale: number) => void;
   onMacbookDeviceScaleChange: (scale: number) => void;
   onDualDeviceSpacingChange: (spacing: number) => void;
+  onBackgroundImageUpdate: (
+    updates: Partial<BackgroundImageSettings>
+  ) => void;
+  onBackgroundImageClear: () => void;
 }
 
 export function MockupDisplay({
@@ -55,6 +62,7 @@ export function MockupDisplay({
   shadowBlur,
   shadowSpread,
   shadowOpacity,
+  backgroundImageSettings,
   isFullscreen,
   isDarkMode,
   currentTime,
@@ -70,6 +78,8 @@ export function MockupDisplay({
   onIphoneDeviceScaleChange,
   onMacbookDeviceScaleChange,
   onDualDeviceSpacingChange,
+  onBackgroundImageUpdate,
+  onBackgroundImageClear,
 }: MockupDisplayProps) {
   const shadowFilter = shadowEnabled
     ? `drop-shadow(0 ${
@@ -79,6 +89,8 @@ export function MockupDisplay({
       }px rgba(0, 0, 0, ${shadowOpacity * 0.5}))`
     : "none";
   const spacingValue = Math.max(0, dualDeviceSpacing ?? 32);
+  const hasBackgroundImage =
+    backgroundImageSettings.enabled && backgroundImageSettings.imageData;
 
   return (
     <div
@@ -89,6 +101,23 @@ export function MockupDisplay({
       }`}
       style={gradientStyle}
     >
+      {hasBackgroundImage && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="absolute left-1/2 top-1/2 h-[140%] w-[140%]"
+            style={{
+              backgroundImage: `url(${backgroundImageSettings.imageData})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              transform: `translate(-50%, -50%) translate(${backgroundImageSettings.offsetX}px, ${backgroundImageSettings.offsetY}px) rotate(${backgroundImageSettings.rotation}deg) scale(${backgroundImageSettings.scale})`,
+              transition: "transform 0.3s ease",
+            }}
+          />
+        </div>
+      )}
+
       {activeDevice === "iphone" && (
         <TooltipProvider>
           <Tooltip>
@@ -521,6 +550,14 @@ export function MockupDisplay({
                 URL cannot be changed in fullscreen mode, but you can refresh the website
               </p>
             </div>
+
+            <BackgroundImageControls
+              settings={backgroundImageSettings}
+              onUpdate={onBackgroundImageUpdate}
+              onClear={onBackgroundImageClear}
+              isDarkMode={isDarkMode}
+              idPrefix="background-fullscreen"
+            />
 
             {activeDevice === "both" && (
               <Card
