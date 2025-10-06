@@ -233,7 +233,7 @@ export function MockupDisplay({
                   </div>
 
                   <iframe
-                    src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
+                    src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ""}`}
                     className="w-full h-full border-0 bg-white origin-top-left"
                     title="Website Preview"
                     allow="cookies *"
@@ -296,7 +296,7 @@ export function MockupDisplay({
             style={{ borderRadius: `${macbookSettings.cornerRadius ?? 0}px` }}
           >
             <iframe
-              src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
+              src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ""}`}
               className="w-full h-full border-0 bg-white origin-top-left"
               title="Website Preview"
               allow="cookies *"
@@ -353,14 +353,14 @@ export function MockupDisplay({
                   >
                     {/* iPhone Status Bar */}
                     <div
-                      className={`absolute top-0 left-0 right-0 z-10 h-11 flex items-center justify-between px-6 text-sm font-medium ${
+                      className={`absolute top-0 left-0 right-0 z-10 h-6 flex items-center justify-between px-4 text-sm font-medium ${
                         isDarkMode
                           ? "text-white bg-black"
                           : "text-black bg-white"
                       }`}
                     >
                       {/* iPhone Notch */}
-                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 rounded-b-3xl bg-black border-2 border-gray-900">
+                      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-6 rounded-b-2xl bg-black border-2 border-gray-900">
                         {/* Speaker grille */}
                         <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-14 h-1 rounded-full bg-gray-800" />
                         {/* Camera */}
@@ -435,7 +435,7 @@ export function MockupDisplay({
                     </div>
 
                     <iframe
-                      src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
+                      src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ""}`}
                       className="w-full h-full border-0 bg-white origin-top-left"
                       title="Website Preview - iPhone"
                       allow="cookies *"
@@ -444,7 +444,7 @@ export function MockupDisplay({
                         transform: `scale(${iphoneSettings.websiteScale})`,
                         width: `${100 / iphoneSettings.websiteScale}%`,
                         height: `${100 / iphoneSettings.websiteScale}%`,
-                        marginTop: "44px",
+                        marginTop: "24px",
                         overflow: "hidden",
                         scrollbarWidth: "none",
                         msOverflowStyle: "none",
@@ -489,7 +489,7 @@ export function MockupDisplay({
                 }}
               >
                 <iframe
-                  src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ''}`}
+                  src={`${websiteUrl}${refreshKey ? `#${refreshKey}` : ""}`}
                   className="w-full h-full border-0 bg-white origin-top-left"
                   title="Website Preview - MacBook"
                   allow="cookies *"
@@ -547,7 +547,8 @@ export function MockupDisplay({
                 </button>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                URL cannot be changed in fullscreen mode, but you can refresh the website
+                URL cannot be changed in fullscreen mode, but you can refresh
+                the website
               </p>
             </div>
 
